@@ -1,0 +1,5 @@
+1. app.py 运行在 127.0.0.1:5000 下，作为正常网站服务，对应 index.html
+
+2. app_eval.py 运行在 127.0.0.1:5001 下，作为恶意网站服务，对应 eval.html
+
+3. app.py 内的全局变量 defend(bool)代表是否开启 XSS、SQL 注入以及 CSRF 三种攻击的防御。

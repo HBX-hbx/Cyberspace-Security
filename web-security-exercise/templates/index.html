@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+{% autoescape false %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web安全实验</title>
+  </head>
+
+  <body>
+
+    <!-- Header -->
+    <header>
+      <h1>Web安全实验</h1>
+      <p>你可以查询并且发布评论</p>
+    </header>
+
+    <!-- Search form -->
+    <form action="/" method="GET">
+      <input type="text" name="q" 
+             placeholder="搜索内容" autocomplete="off" />
+      <input type="submit" value="提交" />
+    </form>
+
+    <!-- Comments -->
+    {% if not search_query %}
+      <h3>所有的评论如下:</h3>
+    {% else %}
+      <h3>包含 "{{ search_query }}" 评论如下:</h3>
+    {% endif %}
+
+    {% for comment in comments %}
+      <div>
+        <p>{{ comment }}</p>
+      </div>
+    {% endfor %}
+
+    <!-- Write form -->
+    <form action="/" method="POST">
+      <input type="text" name="comment" 
+             placeholder="评论" autocomplete="off" />
+      <input type="submit" value="提交新评论" />
+    </form>
+
+    <!-- login status -->
+    {% if login %}
+      <h4>已登录，用户名： {{ username }} </h4>
+    {% else %}
+      <h4>未登录，用户名： {{ username }}</h4>
+    {% endif %}
+    <form action="/out" method="POST">
+      <input type="submit" value="退出登录" />
+    </form>
+
+    <h3>账号登录</h3>
+    <!-- Write form -->
+    <form action="/login" method="POST">
+      <label>Username:</label><br>
+      <input type="text" name="username" placeholder="用户名" autocomplete="off" /><br>
+      <label>Password:</label><br>
+      <input type="password" name="password" placeholder="密码" autocomplete="off" /><br><br>
+      <input type="submit" value="登录" />
+    </form>
+
+    <h3>注册</h3>
+    <!-- Write form -->
+    <form action="/register" method="POST">
+      <label>Username:</label><br>
+      <input type="text" name="username" placeholder="用户名" autocomplete="off" /><br>
+      <label>Password:</label><br>
+      <input type="password" name="password" placeholder="密码" autocomplete="off" /><br><br>
+      <input type="submit" value="注册" />
+    </form>
+
+    <form id="csrf" action="/csrf" method="POST">
+      <input type="text" name="account" placeholder="收款人" autocomplete="off" /><br>
+      <input type="text" name="amount" placeholder="金额" autocomplete="off" /><br><br>
+      <input type="submit" value="转账" />
+      <p>转账结果：{{ result }}</p>
+    </form>
+
+    <form action="http://127.0.0.1:5001" onclick="removeCookie()" method="POST">
+      <input type="submit" value="点我，有㊙" />
+    </form>
+
+    <script>
+      function removeCookie() {
+        var defend = '{{ defend }}';
+        if(defend === "True") {
+          document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+      }
+    </script>
+
+  </body>
+</html>
+{% endautoescape %}
